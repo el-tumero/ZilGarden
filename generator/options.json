@@ -1,0 +1,18 @@
+{
+    "plant": {
+        "pinataMetadata": {
+            "name": "plantImg"
+        },
+        "pinataOptions": {
+            "cidVersion": 0
+        }
+    },
+    "plantJSON": {
+        "pinataMetadata": {
+            "name": "plantMetadata"
+        },
+        "pinataOptions": {
+            "cidVersion": 0
+        }
+    }
+}
