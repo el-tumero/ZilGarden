@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .canvasDiv {
+            padding-top: 7vh;
+        }
+
+        .canvasBg {
+            background-color: skyblue;
+        }
+
+        canvas {
+            width: 1000px;
+            height: 500px;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .App {
+            background-color: lightgrey;
+            height: 100vh;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="App">
+        <div class="canvasDiv">
+            <canvas class="canvasBg" id="canvas" width="1000px" height="500px"></canvas>
+        </div>
+    </div>
+</body>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false
+
+
+    for (let i = 0; i < 1000; i = i + 10) {
+        ctx.fillStyle = '#357307';
+        ctx.fillRect(i, (Math.sin(i / 10) * 2) + 400, 10, 5)
+        ctx.fillStyle = '#64CD0E';
+        ctx.fillRect(i, (Math.sin(i / 10) * 2) + 403, 10, 2)
+
+        ctx.fillStyle = '#499A08';
+        ctx.fillRect(i, (Math.sin(i / 10) * 2) + 405, 10, 5)
+        ctx.fillRect(i, (Math.sin(i / 10) * 2) + 409, 10, 10)
+
+    }
+    ctx.fillRect(0, 410, 1000, 100)
+
+    const cloudImg = new Image();
+    cloudImg.src = 'tempcloud.png'
+    cloudImg.onload = drawClouds;
+
+    function drawClouds() {
+        ctx.drawImage(cloudImg, 40, 30, 128, 128)
+        ctx.drawImage(cloudImg, 240, 30, 128, 128)
+        ctx.drawImage(cloudImg, 440, 30, 128, 128)
+        ctx.drawImage(cloudImg, 640, 30, 128, 128)
+        ctx.drawImage(cloudImg, 840, 30, 128, 128)
+
+
+    }
+
+
+
+</script>
+
+</html>

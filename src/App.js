@@ -3,6 +3,7 @@ import './App.css';
 import config from './config.json'
 import axios from 'axios';
 import loadingGif from './loading.gif'
+//import connectBtn from './connectbtn.png'
 import Hill from './Hill';
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
     var interval;
     function loadArr(){
       if(typeof metaArr[0] !== 'undefined'){
+        //console.log(metaArr)
         setDataLoaded(1)
         setmicroLoading(0)
         clearInterval(interval)
@@ -61,44 +63,6 @@ function App() {
     interval = setInterval(loadArr, 1000) 
   }, [metaArr])
 
-  function RenderImages(){
-
-    var listItems = <div></div>
-    
-    if(dataLoaded === 1){
-      
-      listItems = metaArr.map((obj, index) => 
-        <div key={index}><img alt="" src={obj.image}></img><p>{obj.name}</p></div>
-      )
-    }
-
-    return(<div>{listItems}</div>)
-  }
-
-  // async function checkTokenURI(id){
-
-  // const utils = zilWallet.utils;
-  // const amount = utils.units.toQa(0, utils.units.Units.Zil);
-  // const gasPrice = utils.units.toQa('1000', utils.units.Units.Li)
-
-  //   const tx = await contract.call(
-  //    'GetTokenURI',
-  //    [
-  //      {
-  //        vname: 'token_id',
-  //        type: 'Uint256',
-  //        value: id
-  //      }
-  //    ],
-  //    {
-  //      amount,
-  //      gasPrice,
-  //      gasLimit: utils.Long.fromNumber(9000)
-  //    },
-  //    true
-  //   )
-  //   console.log(tx)
-  // }
 
   async function activate(){
     
@@ -117,11 +81,7 @@ function App() {
       else{
         alert(`You are connected to wrong network. Use ${config.network} instead!`)
       }
-
-      }
-      if(init === 1){
-        window.location.reload()
-      }
+    }
 
   }
 
@@ -129,17 +89,35 @@ function App() {
     return (
       <div className="App">
         <div className="top-bar">
-          <button onClick={() => activate()}>{btnLabel}</button>
-  
+
+      
+          <div className="title">ZilGarden</div>
+          
+          {init=== 1 &&
+          <div className="address">{account.bech32}</div>
+          }
+
+          {init === 0 &&
+            <button onClick={() => activate()} className="connectBtn"></button>
+          }
+          {init === 1 &&
+            <button className="claimBtn"></button>
+          }
+          
         </div>
-        <br />
+  
       {microLoading === 1 &&
       <div><img alt="Loading..." className="loadingGif" src={loadingGif}></img></div>
       }
      
      
       {/* <RenderImages></RenderImages> */}
-      <Hill />
+      {dataLoaded === 1 &&
+        <div className="canvasDiv">
+        <Hill data={metaArr}/>
+        </div>
+      }
+
       
 
         

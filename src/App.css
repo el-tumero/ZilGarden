@@ -1,5 +1,14 @@
+@font-face {
+  font-family: 'PixelOperator';
+  src: local('PixelOperator'), url(./fonts/PixelOperator.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'PixelOperatorHB';
+  src: local('PixelOperatorHB'), url(./fonts/PixelOperatorHB.ttf) format('truetype');
+}
+
 .App {
-  background-color: aqua;
+  background-color: lightgrey;
   height: 100vh;
   text-align: center;
 }
@@ -10,14 +19,83 @@
 }
 
 .top-bar{
-  padding-top: 3vh;
-  padding-bottom: 3vh;
-  padding-right: 3ch;
-  background-color: green;
-  text-align: right;
+  padding-top: 1vh;
+  padding-bottom: 2vh;
+  padding-right: 2vw; 
+  background-color: darkgray;
+  /* text-align: right; */
+  height: 5vh
 }
 
 .canvasBg{
-  background-color: white;
+  background-color: skyblue;
 }
 
+.canvasDiv{
+  margin-top: 7vh;
+}
+
+.connectBtn{
+  background:url('./connectbtn2.png') no-repeat;
+  cursor: pointer;
+  border: none;
+  width: 64px;
+  height: 38px;
+  margin-top: 0.3vh;
+  position: absolute;
+  right: 0;
+  margin-right: 2vw;
+}
+
+.connectBtn:hover{
+  background:url('./connectbtnpressed2.png') no-repeat;
+}
+
+.claimBtn{
+  background:url('./claimbtn.png') no-repeat;
+  cursor: pointer;
+  border: none;
+  width: 64px;
+  height: 38px;
+  margin-top: 0.3vh;
+  position: absolute;
+  right: 0;
+  margin-right: 2vw;
+}
+
+.claimBtn:hover{
+  background:url('./claimbtnpressed.png') no-repeat;
+}
+
+.address{
+  font-family: 'PixelOperator';
+  margin-top: 1.5vh;
+  font-size: larger;
+  position: absolute;
+  right: 0;
+  margin-right: 10vw;
+
+}
+
+.title{
+  position: absolute;
+  font-size: 2rem;
+  margin-left: 2vw;
+  margin-top: -0.5vh;
+  font-family: 'PixelOperatorHB';
+  border: 1px black solid;
+  background-color: #60D838;
+  color: white;
+  border-radius: 5px;
+  padding: 4px;
+  
+}
+
+canvas {
+  width: 1000px;
+  height: 500px;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
