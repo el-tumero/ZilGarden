@@ -12,6 +12,7 @@ function App() {
   const [microLoading, setmicroLoading] = useState(0);
   const [init, setInit] = useState(0);
   const [contract, setContract] = useState();
+  const [minter, setMinter] = useState();
   const [account, setAccount] = useState();
   const [zilWallet, setZilWallet] = useState();
   const [btnLabel, setBtnLabel] = useState('Connect Wallet');
@@ -63,6 +64,24 @@ function App() {
     interval = setInterval(loadArr, 1000) 
   }, [metaArr])
 
+  async function claim(){
+    if(minter !== undefined){
+      const gasPrice = zilWallet.utils.units.toQa('1000', zilWallet.utils.units.Units.Li)
+      const amount = zilWallet.utils.units.toQa(1, zilWallet.utils.units.Units.Zil);
+      const tx = await minter.call(
+        'Mint',
+        [],
+        {
+          amount,
+          gasPrice,
+          gasLimit: zilWallet.utils.Long.fromNumber(9000)
+        },
+        true
+      )
+      console.log(tx);
+    }
+  }
+
 
   async function activate(){
     
@@ -73,10 +92,12 @@ function App() {
         const _account = zilWallet.wallet.defaultAccount;
         const _accountBech32 = _account.bech32;
         const _contract = await zilWallet.contracts.at(config.contract_address)
+        const _minter = await zilWallet.contracts.at(config.minter_address)
         setAccount(_account);
         setBtnLabel(_accountBech32);
         setInit(1);
         setContract(_contract);
+        setMinter(_minter)
       }
       else{
         alert(`You are connected to wrong network. Use ${config.network} instead!`)
@@ -101,7 +122,7 @@ function App() {
             <button onClick={() => activate()} className="connectBtn"></button>
           }
           {init === 1 &&
-            <button className="claimBtn"></button>
+            <button onClick={() => claim()}className="claimBtn"></button>
           }
           
         </div>
@@ -128,7 +149,7 @@ function App() {
   if(loading === 1){
     return (
       <div>
-        <h1>Loading...</h1>
+        <h1 className="pageLoadingTitle">Loading...</h1>
       </div>
     )
   }

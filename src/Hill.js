@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import cloud from './tempcloud.png'
+import cloud from './assets/cloud.png'
 function Hill(props){
 
     const screen = {
@@ -42,14 +42,15 @@ function Hill(props){
     useEffect(() => {
         if(typeof images !== 'undefined' && images.length > 0){
 
-            images[0].onload = () => {
-                ctx.drawImage(images[0], 150, 340)
-            }
+            images.slice(-5);
+            const pos = [600, 450, 750, 300, 150, 900, 0]
 
-            images[1].onload = () => {
-                ctx.drawImage(images[1], 400, 340)
-            }
-            
+            images.forEach((element, index) => {
+                element.onload = () => {
+                    ctx.drawImage(element, pos[index], 340)
+                }
+            })
+
         }
     }, [images])
 

@@ -13,6 +13,15 @@
   text-align: center;
 }
 
+.pageLoadingTitle {
+  font-family: 'PixelOperator';
+  position: absolute;
+  margin-left: 46%;
+  margin-top: 20%;
+  top: 0;
+  left:0;
+}
+
 .loadingGif{
   height: 50px;
   width: 50px;
@@ -36,7 +45,7 @@
 }
 
 .connectBtn{
-  background:url('./connectbtn2.png') no-repeat;
+  background:url('./assets/connectbtn.png') no-repeat;
   cursor: pointer;
   border: none;
   width: 64px;
@@ -48,11 +57,11 @@
 }
 
 .connectBtn:hover{
-  background:url('./connectbtnpressed2.png') no-repeat;
+  background:url('./assets/connectbtnpressed.png') no-repeat;
 }
 
 .claimBtn{
-  background:url('./claimbtn.png') no-repeat;
+  background:url('./assets/claimbtn.png') no-repeat;
   cursor: pointer;
   border: none;
   width: 64px;
@@ -64,7 +73,7 @@
 }
 
 .claimBtn:hover{
-  background:url('./claimbtnpressed.png') no-repeat;
+  background:url('./assets/claimbtnpressed.png') no-repeat;
 }
 
 .address{
