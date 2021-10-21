@@ -1,0 +1,108 @@
+scilla_version 0
+
+library Minter
+
+let token_address = 0x78d3f43eadcfab5aa00efd1a6be028d456d9dd62
+let zero = Uint128 0
+let one = Uint128 1
+let two = Uint128 2
+
+let one_msg =
+  fun (msg: Message) =>
+  let nil_msg = Nil {Message} in
+  Cons {Message} msg nil_msg
+
+contract Minter
+(owner: ByStr20)
+
+field tokensClaimed: Map ByStr20 Uint128 = Emp ByStr20 Uint128 
+field uris: Map Uint128 String = Emp Uint128 String
+field urisCount: Uint128 = Uint128 0
+field mintCount: Uint128 = Uint128 0
+
+
+transition Mint()
+  
+  countMintTmp <- mintCount;
+  countUrisTmp <- urisCount;
+  uriToMint <- uris[countMintTmp];
+  owned_tokens <- tokensClaimed[_sender];
+  
+  match uriToMint with
+  | Some selectedUri =>
+    msg_to_contract ={
+      _tag : "Mint";
+      _recipient: token_address;
+      _amount: zero;
+      to: _sender;
+      token_uri: selectedUri
+    };
+    
+    is_available = builtin eq countUrisTmp countMintTmp;
+   
+    match is_available with
+    | False =>
+      match owned_tokens with
+      | Some v =>
+        is_one = builtin eq v one;
+        match is_one with
+        | True => 
+        tokensClaimed[_sender] := two;
+        countPlusOne = builtin add countMintTmp one;
+        mintCount:=countPlusOne;
+        msgs = one_msg msg_to_contract;
+        send msgs
+        | False => throw
+        end
+      | None =>
+        tokensClaimed[_sender] := one;
+        countPlusOne = builtin add countMintTmp one;
+        mintCount:=countPlusOne;
+        msgs = one_msg msg_to_contract;
+        send msgs
+      end
+    | True => throw
+    end
+  | None => throw
+  end;
+  accept
+end
+
+transition AddURI(uri: String)
+  is_owner = builtin eq owner _sender;
+  match is_owner with
+  | True =>
+    countTmp <- urisCount;
+    one128 = Uint128 1;
+    uris[countTmp] := uri;
+    countPlusOne = builtin add countTmp one128;
+    urisCount:=countPlusOne
+  | False => throw
+  end
+end
+
+transition Withdraw(amount: Uint128)
+  is_owner = builtin eq owner _sender;
+  match is_owner with
+    | True =>
+      msg = {
+        _tag: "";
+        _recipient: _sender;
+        _amount: amount
+      };
+      msgs = one_msg msg;
+      send msgs
+    | False => throw
+  end
+end
+
+
+transition RecipientAcceptMint()
+end
+
+transition MintCallBack(
+  recipient : ByStr20,
+  token_id : Uint256,
+  token_uri : String
+)
+end

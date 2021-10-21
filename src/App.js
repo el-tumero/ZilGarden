@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import config from './config.json'
 import axios from 'axios';
-import loadingGif from './loading.gif'
-//import connectBtn from './connectbtn.png'
+import loadingGif from './assets/loadingPixels.gif'
 import Hill from './Hill';
+import flower from './assets/introflower128.png'
 
 function App() {
 
@@ -18,6 +18,7 @@ function App() {
   const [btnLabel, setBtnLabel] = useState('Connect Wallet');
   const [metaArr, setMetaArray] = useState([]);
   const [dataLoaded, setDataLoaded] = useState();
+  const [claimAvailable, setClaimAvailable] = useState();
 
 
   useEffect(() => {
@@ -27,7 +28,10 @@ function App() {
         setLoading(0);
       }
       else{
-        alert('ZilPay Wallet is not installed!')
+        //alert('')
+        if (window.confirm('ZilPay wallet, which is required to use this dapp, is not installed! Download it from Chrome Web Store. Clicking "Ok" will redirect you to download page.')) {
+          window.location.href='https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd';
+        };
       }
     }
   }, [])
@@ -41,10 +45,11 @@ function App() {
 
       const arr = []
 
-        const keys = Object.keys(token_owners)
-    
-        for(var i=3; i<keys.length+3; i++){
-          if(token_owners[i] === account.base16.toLowerCase()) axios.get(token_uris[i]).then(res => arr.push(res.data))
+        const owners = Object.entries(token_owners)
+        const uris = Object.entries(token_uris);
+
+        for(var i=0; i<owners.length; i++){
+          if(owners[i][1] === account.base16.toLowerCase()) axios.get(uris[i][1]).then(res => arr.push(res.data))
         }
         setMetaArray(arr)
       })()
@@ -63,6 +68,23 @@ function App() {
     }
     interval = setInterval(loadArr, 1000) 
   }, [metaArr])
+
+  useEffect(() => {
+    if(minter !== undefined){
+      (async() => {
+        const state = await minter.getState()
+        if(state.mintCount === state.urisCount){
+          setClaimAvailable(0)
+        } 
+        else{
+          const arr = Object.entries(state.tokensClaimed);
+          const found = arr.find(element => element[0] === account.base16.toLowerCase())
+          if(found[1] == "2") setClaimAvailable(0)
+          if(found[1] !== "2") setClaimAvailable(1)
+        }
+      })()
+    }
+  })
 
   async function claim(){
     if(minter !== undefined){
@@ -112,7 +134,7 @@ function App() {
         <div className="top-bar">
 
       
-          <div className="title">ZilGarden</div>
+          <div className="title"><a className="text" href="./">ZilGarden</a></div>
           
           {init=== 1 &&
           <div className="address">{account.bech32}</div>
@@ -121,8 +143,11 @@ function App() {
           {init === 0 &&
             <button onClick={() => activate()} className="connectBtn"></button>
           }
-          {init === 1 &&
+          {(init === 1 && claimAvailable === 1) &&
             <button onClick={() => claim()}className="claimBtn"></button>
+          }
+          {(init === 1 && claimAvailable === 0) &&
+            <button title="Claiming is not available now :(" className="claimBtnBlocked"></button>
           }
           
         </div>
@@ -138,6 +163,13 @@ function App() {
         <Hill data={metaArr}/>
         </div>
       }
+      {init === 0 &&
+        <div className="welcome">
+          <h1 className="mainmsg">Hello gardener!</h1>
+          <p className="para">We invite you to collect beautiful pixel art flowers represented by NFT. All you need to do is to connect your wallet and claim them, as long as they are available. Every address can claim maximum 2 flowers. Happy gardening!</p>
+          <img className="flower" src={flower}></img>
+        </div>
+      }
 
       
 
@@ -148,7 +180,7 @@ function App() {
   }
   if(loading === 1){
     return (
-      <div>
+      <div className="loadingDiv">
         <h1 className="pageLoadingTitle">Loading...</h1>
       </div>
     )

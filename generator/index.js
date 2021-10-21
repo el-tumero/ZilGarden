@@ -6,30 +6,73 @@ const path = require('path');
 const fs = require('fs')
 
 
-// pinata.testAuthentication().then((result) => {
-//     //handle successful authentication here
-//     console.log(result);
-// }).catch((err) => {
-//     //handle error here
-//     console.log(err);
+
+// DELETE ALL PINS
+const filter = {
+    status: 'pinned',
+    pageLimit: 50,
+    pageOffset: 0,
+}
+
+const pinArr = [];
+
+pinata.pinList(filter).then(result => {
+    result.rows.forEach(element => {
+        pinArr.push(element.ipfs_pin_hash)
+    });
+    console.log(pinArr)
+    var counter = 0
+
+    setInterval(function(){
+        if(counter < pinArr.length){
+            pinata.unpin(pinArr[counter]).then((result) => { 
+            console.log(pinArr[counter])
+            }).catch((err) => {
+            console.log(err);
+            })
+        }
+        counter++
+    }, 5000) 
+});
+
+
+
+// pinata.unpin(element.ipfs_pin_hash).then((result) => { 
+//     console.log(element.ipfs_pin_hash)
+// ;}).catch((err) => {
+//  console.log(err);
+// })
+
+// pinata.userPinnedDataTotal().then((result) => {
+//     console.log(result)
+// }).catch((err) => {  
+//     console.log(err)
 // });
 
-const readableStreamForFile = fs.createReadStream(path.resolve(__dirname + '/images/kwiatek2.png'));
-
-pinata.pinFileToIPFS(readableStreamForFile, options.plant).then((result) => {
-    const gatewayUrl = "https://gateway.pinata.cloud/ipfs/"
-    const json = {
-        "name": "Blue flower",
-        "image": gatewayUrl + result.IpfsHash
-    }
-
-    pinata.pinJSONToIPFS(json, options.plantJSON).then((result2) => {
-        console.log(result2);
-       // _collectible.methods.createCollectible(gatewayUrl+ result2.IpfsHash).send({from: '0x60790ABBD7dd61a745Ae937E5ed4812AC3aE737D', gas: 5000000});    
-    }).catch((err) => {
-        console.log(err);
-    });
-
+pinata.testAuthentication().then((result) => {
+    //handle successful authentication here
+    console.log(result);
 }).catch((err) => {
+    //handle error here
     console.log(err);
 });
+
+// const readableStreamForFile = fs.createReadStream(path.resolve(__dirname + '/images/kwiatek2.png'));
+
+// pinata.pinFileToIPFS(readableStreamForFile, options.plant).then((result) => {
+//     const gatewayUrl = "https://gateway.pinata.cloud/ipfs/"
+//     const json = {
+//         "name": "Blue flower",
+//         "image": gatewayUrl + result.IpfsHash
+//     }
+
+//     pinata.pinJSONToIPFS(json, options.plantJSON).then((result2) => {
+//         console.log(result2);
+//        // _collectible.methods.createCollectible(gatewayUrl+ result2.IpfsHash).send({from: '0x60790ABBD7dd61a745Ae937E5ed4812AC3aE737D', gas: 5000000});    
+//     }).catch((err) => {
+//         console.log(err);
+//     });
+
+// }).catch((err) => {
+//     console.log(err);
+// });
