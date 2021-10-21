@@ -4,36 +4,36 @@ const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_SECRET_KEY);
 const path = require('path');
 const fs = require('fs')
-
+const gatewayUrl = "https://ipfs.io/ipfs/"
 
 
 // DELETE ALL PINS
-const filter = {
-    status: 'pinned',
-    pageLimit: 50,
-    pageOffset: 0,
-}
+// const filter = {
+//     status: 'pinned',
+//     pageLimit: 50,
+//     pageOffset: 0,
+// }
 
-const pinArr = [];
+// const pinArr = [];
 
-pinata.pinList(filter).then(result => {
-    result.rows.forEach(element => {
-        pinArr.push(element.ipfs_pin_hash)
-    });
-    console.log(pinArr)
-    var counter = 0
+// pinata.pinList(filter).then(result => {
+//     result.rows.forEach(element => {
+//         pinArr.push(element.ipfs_pin_hash)
+//     });
+//     console.log(pinArr)
+//     var counter = 0
 
-    setInterval(function(){
-        if(counter < pinArr.length){
-            pinata.unpin(pinArr[counter]).then((result) => { 
-            console.log(pinArr[counter])
-            }).catch((err) => {
-            console.log(err);
-            })
-        }
-        counter++
-    }, 5000) 
-});
+//     setInterval(function(){
+//         if(counter < pinArr.length){
+//             pinata.unpin(pinArr[counter]).then((result) => { 
+//             console.log(pinArr[counter])
+//             }).catch((err) => {
+//             console.log(err);
+//             })
+//         }
+//         counter++
+//     }, 5000) 
+// });
 
 
 
@@ -57,22 +57,44 @@ pinata.testAuthentication().then((result) => {
     console.log(err);
 });
 
-// const readableStreamForFile = fs.createReadStream(path.resolve(__dirname + '/images/kwiatek2.png'));
 
-// pinata.pinFileToIPFS(readableStreamForFile, options.plant).then((result) => {
-//     const gatewayUrl = "https://gateway.pinata.cloud/ipfs/"
-//     const json = {
-//         "name": "Blue flower",
-//         "image": gatewayUrl + result.IpfsHash
-//     }
+const dataGlobal = []
+//const data0 = require('./images/type0/data.json')
+const data1 = require('./images/type1/data.json')
+dataGlobal.push(data1)
 
-//     pinata.pinJSONToIPFS(json, options.plantJSON).then((result2) => {
-//         console.log(result2);
-//        // _collectible.methods.createCollectible(gatewayUrl+ result2.IpfsHash).send({from: '0x60790ABBD7dd61a745Ae937E5ed4812AC3aE737D', gas: 5000000});    
-//     }).catch((err) => {
-//         console.log(err);
-//     });
+// dataGlobal[0].colors.forEach(color => {
+//     pinFlower(1, color)
+// })
 
-// }).catch((err) => {
-//     console.log(err);
-// });
+
+pinFlower(1, '63DDC6')
+
+function pinFlower(type, color){
+    const readableStreamForFile = fs.createReadStream(path.resolve(__dirname + `/images/type${type}/${color}.png`));
+   
+    pinata.pinFileToIPFS(readableStreamForFile, options.plant).then((result) => {
+    const json = {
+        "name": dataGlobal[0].name,
+        "color": color,
+        "stalk_color": dataGlobal[0].stalk_color,
+        "image": gatewayUrl + result.IpfsHash,
+        "image_cid": result.IpfsHash
+    }
+    //console.log(json);
+
+    pinata.pinJSONToIPFS(json, options.plantJSON).then((result2) => {
+    console.log(result2);
+    }).catch((err) => {
+        console.log(err);
+    });
+
+
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+

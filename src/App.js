@@ -133,27 +133,42 @@ function App() {
       <div className="App">
         <div className="top-bar">
 
-      
+          <div className="titleDiv">
           <div className="title"><a className="text" href="./">ZilGarden</a></div>
+          </div>
           
           {init=== 1 &&
           <div className="address">{account.bech32}</div>
           }
 
+          {init===0 &&
+          <div></div>
+          }
+
           {init === 0 &&
+            <div className="connectBtnDiv">
             <button onClick={() => activate()} className="connectBtn"></button>
+            </div>
           }
           {(init === 1 && claimAvailable === 1) &&
+            <div className="connectBtnDiv">
             <button onClick={() => claim()}className="claimBtn"></button>
+            </div>
           }
           {(init === 1 && claimAvailable === 0) &&
+            <div className="connectBtnDiv">
             <button title="Claiming is not available now :(" className="claimBtnBlocked"></button>
+            </div>
           }
           
         </div>
   
       {microLoading === 1 &&
-      <div><img alt="Loading..." className="loadingGif" src={loadingGif}></img></div>
+      <div>
+        <img alt="Loading..." className="loadingGif" src={loadingGif}></img>
+        <p className="info">If loading too long, it means that you haven't got any plants :(</p>
+        <p className="info">You can claim them by clicking button in right top corner ;)</p>
+      </div>
       }
      
      
@@ -166,8 +181,13 @@ function App() {
       {init === 0 &&
         <div className="welcome">
           <h1 className="mainmsg">Hello gardener!</h1>
-          <p className="para">We invite you to collect beautiful pixel art flowers represented by NFT. All you need to do is to connect your wallet and claim them, as long as they are available. Every address can claim maximum 2 flowers. Happy gardening!</p>
+          <p className="para">We invite you to collect beautiful pixel art flowers NFTs. If tokens are available, all you have to do is to connect your wallet and click CLAIM button. Every address is allowed to claim maximum 2 flowers. Happy gardening!</p>
           <img className="flower" src={flower}></img>
+          <br />
+          <p>Links:</p>
+          <a className="link" href="https://github.com/el-tumero/ZilGarden">Github</a>
+          <a className="link" href="https://www.youtube.com/watch?v=e3Rmk7viv_Q&ab_channel=tumer">Demo</a>
+          <p>made by el-tumero</p>
         </div>
       }
 

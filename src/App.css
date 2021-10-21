@@ -24,12 +24,20 @@ body{
   width: 50%;
   margin-top: 15%;
 }
+
+.info {
+  font-family: 'PixelOperator';
+  font-size: 1.5rem
+}
+
 .pageLoadingTitle {
   font-family: 'PixelOperator';
 }
 
 .welcome {
   font-family: 'PixelOperatorHB';
+  margin-top: 5%;
+  /* background-color: hotpink; */
   
 }
 
@@ -44,6 +52,10 @@ body{
   width: 50%;
 }
 
+.welcome .link{
+  margin: 10px;
+}
+
 .loadingGif{
   height: 75px;
   width: 75px;
@@ -51,12 +63,10 @@ body{
 }
 
 .top-bar{
-  padding-top: 1vh;
-  padding-bottom: 2vh;
-  padding-right: 2vw; 
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 50% 40% 10%;
   background-color: darkgray;
-  /* text-align: right; */
-  height: 5vh
 }
 
 .canvasBg{
@@ -67,16 +77,19 @@ body{
   margin-top: 7vh;
 }
 
+.connectBtnDiv{
+  align-self: center;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .connectBtn{
   background:url('./assets/connectbtn.png') no-repeat;
   cursor: pointer;
   border: none;
   width: 64px;
   height: 38px;
-  margin-top: 0.3vh;
-  position: absolute;
-  right: 0;
-  margin-right: 2vw;
+  margin-right: 20px;
 }
 
 .connectBtn:hover{
@@ -89,10 +102,7 @@ body{
   border: none;
   width: 64px;
   height: 38px;
-  margin-top: 0.3vh;
-  position: absolute;
-  right: 0;
-  margin-right: 2vw;
+  margin-right: 20px;
 }
 
 .claimBtnBlocked{
@@ -101,10 +111,8 @@ body{
   border: none;
   width: 64px;
   height: 38px;
-  margin-top: 0.3vh;
-  position: absolute;
-  right: 0;
-  margin-right: 2vw;
+  margin-right: 20px;
+
 }
 
 .claimBtn:hover{
@@ -113,27 +121,30 @@ body{
 
 .address{
   font-family: 'PixelOperator';
-  margin-top: 1.5vh;
   font-size: larger;
-  position: absolute;
-  right: 0;
-  margin-right: 10vw;
-
+  align-self: center;
+  text-align: right;
 }
 
+
+.titleDiv{
+  width: 200px;
+}
 .title{
-  position: absolute;
-  font-size: 2rem;
-  margin-left: 2vw;
-  margin-top: -0.5vh;
   font-family: 'PixelOperatorHB';
   border: 1px black solid;
   background-color: #60D838;
   border-radius: 5px;
+  
   padding: 4px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
 }
 
 .title .text{
+  font-size: 2rem;
   text-decoration: none;
   color: white
 }
@@ -141,6 +152,7 @@ body{
 .title .text:hover{
   color: rgb(238, 238, 238);
 }
+
 
 canvas {
   width: 1000px;
