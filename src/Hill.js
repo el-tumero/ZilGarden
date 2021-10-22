@@ -47,7 +47,7 @@ function Hill(props){
 
             images.forEach((element, index) => {
                 element.onload = () => {
-                    ctx.drawImage(element, pos[index], 340)
+                    ctx.drawImage(element, pos[index], 350)
                 }
             })
 

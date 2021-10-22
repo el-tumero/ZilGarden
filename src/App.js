@@ -19,6 +19,7 @@ function App() {
   const [metaArr, setMetaArray] = useState([]);
   const [dataLoaded, setDataLoaded] = useState();
   const [claimAvailable, setClaimAvailable] = useState();
+  const [availableTokens, setAvailableTokens] = useState();
 
 
   useEffect(() => {
@@ -73,14 +74,18 @@ function App() {
     if(minter !== undefined){
       (async() => {
         const state = await minter.getState()
+        setAvailableTokens(state.urisCount - state.mintCount);
         if(state.mintCount === state.urisCount){
           setClaimAvailable(0)
-        } 
+        }
         else{
-          const arr = Object.entries(state.tokensClaimed);
+          const arr = await Object.entries(state.tokensClaimed);
           const found = arr.find(element => element[0] === account.base16.toLowerCase())
-          if(found[1] == "2") setClaimAvailable(0)
-          if(found[1] !== "2") setClaimAvailable(1)
+          if(found === undefined) setClaimAvailable(1)
+          else{
+            if(found[1] == "2") setClaimAvailable(0)
+            if(found[1] !== "2") setClaimAvailable(1)
+          }
         }
       })()
     }
@@ -138,7 +143,7 @@ function App() {
           </div>
           
           {init=== 1 &&
-          <div className="address">{account.bech32}</div>
+          <div className="address">{account.bech32}&nbsp;&nbsp;&nbsp;&nbsp;<u>Tokens available: {availableTokens}</u></div>
           }
 
           {init===0 &&

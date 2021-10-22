@@ -65,7 +65,7 @@ body{
 .top-bar{
   width: 100%;
   display: inline-grid;
-  grid-template-columns: 50% 40% 10%;
+  grid-template-columns: 45% 45% 10%;
   background-color: darkgray;
 }
 
