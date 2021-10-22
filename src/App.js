@@ -192,7 +192,7 @@ function App() {
           <p>Links:</p>
           <a className="link" href="https://github.com/el-tumero/ZilGarden">Github</a>
           <a className="link" href="https://t.me/el_tumero">Telegram</a>
-          <a className="link" href="https://www.youtube.com/watch?v=e3Rmk7viv_Q&ab_channel=tumer">Demo</a>
+          <a className="link" href="https://www.youtube.com/watch?v=sF40wt3KdbI&ab_channel=tumer">Demo</a>
           <p>made by el-tumero</p>
         </div>
       }
