@@ -153,6 +153,30 @@ body{
   color: rgb(238, 238, 238);
 }
 
+.tokenId{
+  font-family: 'PixelOperator';
+  font-size: 1.5rem;
+}
+
+.tokenIdInfo{
+  margin-top: -20px;
+  font-family: 'PixelOperator';
+  font-size: 1.2rem
+}
+
+.author{
+  margin-top: 5px;
+}
+
+.version{
+  margin-top: -15px;
+  font-family: 'PixelOperator';
+  font-size: 1rem;
+  color: rgb(90, 90, 90);
+
+}
+
+
 
 canvas {
   width: 1000px;

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import cloud from './assets/cloud.png'
+//importing clouds :0
+import Clouds from './assets/clouds/index.js'
+
 function Hill(props){
 
     const screen = {
@@ -10,6 +12,12 @@ function Hill(props){
 
     const [ctx, setCtx] = useState();
     const [images, setImages] = useState([]);
+    const [x, setX] = useState();
+    const [y, setY] = useState();
+    const [canvas, setCanvas] = useState();
+    const [positions, setPosition] = useState([]);
+    const [pos, setPos] = useState([600, 450, 750, 300, 150, 900, 0])
+    const [currentFlower, setCurrentFlower] = useState()
     const canvasRef = useRef(null)
 
     useEffect(() => {
@@ -22,6 +30,8 @@ function Hill(props){
 
         const canvasObj = canvasRef.current;
         const _ctx = canvasObj.getContext('2d');
+        
+        setCanvas(canvasObj);
         setCtx(_ctx);
         setImages(_images);
     }, [])
@@ -43,11 +53,13 @@ function Hill(props){
         if(typeof images !== 'undefined' && images.length > 0){
 
             images.slice(-5);
-            const pos = [600, 450, 750, 300, 150, 900, 0]
+            // const pos = [600, 450, 750, 300, 150, 900, 0]
+           //console.log(images)
 
             images.forEach((element, index) => {
                 element.onload = () => {
                     ctx.drawImage(element, pos[index], 350)
+                    setPosition(oldData => [...oldData, element.currentSrc])
                 }
             })
 
@@ -68,24 +80,56 @@ function Hill(props){
         }
         ctx.fillRect(0, 410, 1000, 100)
 
-        const cloudImg = new Image();
-        cloudImg.src = cloud;
-        cloudImg.onload = drawClouds;
+        let cloudImgs = []
 
-        function drawClouds(){
-            ctx.drawImage(cloudImg, 40, 30, 128, 128)
-            ctx.drawImage(cloudImg, 240, 30, 128, 128)
-            ctx.drawImage(cloudImg, 440, 30, 128, 128)
-            ctx.drawImage(cloudImg, 640, 30, 128, 128)
-            ctx.drawImage(cloudImg, 840, 30, 128, 128)
+        for (let i = 0; i < Object.entries(Clouds).length; i++) {
+            cloudImgs[i] = new Image();
+            cloudImgs[i].src = Clouds['cloud' + i]
+            cloudImgs[i].onload = () => {
+                ctx.drawImage(cloudImgs[i], 40 + i*200, 35, 128, 128)
+            }
         }
     }
+
+    function _onMouseMove(e) {
+        let rect = canvas.getBoundingClientRect();
+        let _x = e.clientX - rect.left
+        let _y = e.clientY - rect.top 
+        setX(_x)
+        setY(_y)
+        
+        pos.forEach((cord, index) => {
+            if(_x > cord && _x < cord + 64 && _y > 340 && _y < 420){
+                if(positions[index]){
+                const result = props.data.find(x => x.image_cid == positions[index].slice(21))
+                if(result) setCurrentFlower(result.id)
+                }
+            }            
+        })
+    }
+
+    function _onMouseDown(e){
+        pos.forEach((cord, index) => {
+            if(x > cord && x < cord + 64 && y > 340 && y < 420){
+                if(positions[index]){
+                const result = props.data.find(x => x.image_cid == positions[index].slice(21))
+                if(result) window.open(result.uri)
+                }
+            }
+        });
+        
+    }
+    
     
 
     return(
-        <div>
-            <canvas width='1000px' height='500px' className="canvasBg" ref={canvasRef}/>
+        <div>  
+            <canvas onMouseDown={_onMouseDown} onMouseMove={_onMouseMove} width='1000px' height='500px' className="canvasBg" ref={canvasRef}/>
             
+                <h3 className="tokenId">Token ID: {currentFlower}</h3>
+                <p className="tokenIdInfo">Click on flower to check its metadata ;)</p>
+            
+
         </div>
     )
 }

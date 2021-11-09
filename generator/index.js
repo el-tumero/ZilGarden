@@ -61,10 +61,17 @@ const filter = {
     metadata: metadataFilter
 }
 
+
 pinata.pinList(filter).then(result => {
     //console.log(result)
-    result.rows.forEach((element, index) => console.log(index+1, element.ipfs_pin_hash))
+    let cid_arr = []
+    //result.rows.forEach((element, index) => console.log(index+1, element.ipfs_pin_hash))
+    result.rows.forEach((element, index) => cid_arr.push(element.ipfs_pin_hash))
+    console.log(cid_arr)
 })
+
+
+
 
 
 pinata.testAuthentication().then((result) => {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import packageJson from '../package.json'
 import config from './config.json'
 import axios from 'axios';
 import loadingGif from './assets/loadingPixels.gif'
@@ -20,6 +21,7 @@ function App() {
   const [dataLoaded, setDataLoaded] = useState();
   const [claimAvailable, setClaimAvailable] = useState();
   const [availableTokens, setAvailableTokens] = useState();
+  const [tokensOwned, setTokensOwned ] = useState();
 
 
   useEffect(() => {
@@ -45,14 +47,29 @@ function App() {
       const { token_owners } = await contract.getSubState('token_owners')
 
       const arr = []
-
+        
         const owners = Object.entries(token_owners)
         const uris = Object.entries(token_uris);
 
+        const result = owners.filter(x => x[1] == account.base16.toLowerCase())
+        setTokensOwned(result.length)
+        //console.log(result)
+
         for(var i=0; i<owners.length; i++){
-          if(owners[i][1] === account.base16.toLowerCase()) axios.get(uris[i][1]).then(res => arr.push(res.data))
+          if(owners[i][1] === account.base16.toLowerCase()){
+            let token_id = owners[i][0]
+            let metadata_uri = uris[i][1]
+            axios.get(uris[i][1]).then(res => {
+              res.data.uri = metadata_uri
+              res.data.id = token_id
+              arr.push(res.data)
+            })
+
+          } 
         }
+
         setMetaArray(arr)
+        //console.log(arr)
       })()
     }
   }, [contract])
@@ -143,13 +160,13 @@ function App() {
           </div>
           
           {init=== 1 &&
-          <div className="address">{account.bech32}&nbsp;&nbsp;&nbsp;&nbsp;<u>Tokens available: {availableTokens}</u></div>
+          <div className="address">{account.bech32} &nbsp;&nbsp;&nbsp;&nbsp; Tokens owned: {tokensOwned} &nbsp;&nbsp;&nbsp;&nbsp;<u>Tokens available: {availableTokens}</u></div>
           }
 
           {init===0 &&
           <div></div>
           }
-
+          
           {init === 0 &&
             <div className="connectBtnDiv">
             <button onClick={() => activate()} className="connectBtn"></button>
@@ -193,7 +210,8 @@ function App() {
           <a className="link" href="https://github.com/el-tumero/ZilGarden">Github</a>
           <a className="link" href="https://t.me/el_tumero">Telegram</a>
           <a className="link" href="https://www.youtube.com/watch?v=sF40wt3KdbI&ab_channel=tumer">Demo</a>
-          <p>made by el-tumero</p>
+          <p className="author">made by el-tumero</p>
+          <p className="version">{packageJson.version}</p>
         </div>
       }
 
