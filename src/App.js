@@ -16,12 +16,12 @@ function App() {
   const [minter, setMinter] = useState();
   const [account, setAccount] = useState();
   const [zilWallet, setZilWallet] = useState();
-  const [btnLabel, setBtnLabel] = useState('Connect Wallet');
   const [metaArr, setMetaArray] = useState([]);
   const [dataLoaded, setDataLoaded] = useState();
   const [claimAvailable, setClaimAvailable] = useState();
   const [availableTokens, setAvailableTokens] = useState();
   const [tokensOwned, setTokensOwned ] = useState();
+  const [bgColor, setBgColor] = useState('App');
 
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
         const owners = Object.entries(token_owners)
         const uris = Object.entries(token_uris);
 
-        const result = owners.filter(x => x[1] == account.base16.toLowerCase())
+        const result = owners.filter(x => x[1] === account.base16.toLowerCase())
         setTokensOwned(result.length)
         //console.log(result)
 
@@ -80,6 +80,7 @@ function App() {
       if(typeof metaArr[0] !== 'undefined'){
         //console.log(metaArr)
         setDataLoaded(1)
+        setBgColor('App-green')
         setmicroLoading(0)
         clearInterval(interval)
       }
@@ -100,7 +101,7 @@ function App() {
           const found = arr.find(element => element[0] === account.base16.toLowerCase())
           if(found === undefined) setClaimAvailable(1)
           else{
-            if(found[1] == "2") setClaimAvailable(0)
+            if(found[1] === "2") setClaimAvailable(0)
             if(found[1] !== "2") setClaimAvailable(1)
           }
         }
@@ -138,7 +139,6 @@ function App() {
         const _contract = await zilWallet.contracts.at(config.contract_address)
         const _minter = await zilWallet.contracts.at(config.minter_address)
         setAccount(_account);
-        setBtnLabel(_accountBech32);
         setInit(1);
         setContract(_contract);
         setMinter(_minter)
@@ -152,7 +152,7 @@ function App() {
 
   if(loading === 0){
     return (
-      <div className="App">
+      <div className={bgColor}>
         <div className="top-bar">
 
           <div className="titleDiv">
@@ -204,7 +204,7 @@ function App() {
         <div className="welcome">
           <h1 className="mainmsg">Hello gardener!</h1>
           <p className="para">We invite you to collect beautiful pixel art flowers NFTs. If tokens are available, all you have to do is to connect your wallet and click CLAIM button. Every address is allowed to claim maximum 2 flowers. Happy gardening!</p>
-          <img className="flower" src={flower}></img>
+          <img className="flower" alt="flower" src={flower}></img>
           <br />
           <p>Links:</p>
           <a className="link" href="https://github.com/el-tumero/ZilGarden">Github</a>

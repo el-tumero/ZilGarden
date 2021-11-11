@@ -17,6 +17,12 @@ body{
   text-align: center;
 }
 
+.App-green{
+  background-color: #499A08;
+  height: 100vh;
+  text-align: center;
+}
+
 
 .loadingDiv{
   text-align: center;
@@ -71,10 +77,11 @@ body{
 
 .canvasBg{
   background-color: skyblue;
+  width: 100%;
 }
 
 .canvasDiv{
-  margin-top: 7vh;
+  background-color: #499A08;
 }
 
 .connectBtnDiv{
@@ -156,12 +163,16 @@ body{
 .tokenId{
   font-family: 'PixelOperator';
   font-size: 1.5rem;
+  color: white;
+  text-shadow: 1px 1px black;
 }
 
 .tokenIdInfo{
   margin-top: -20px;
   font-family: 'PixelOperator';
-  font-size: 1.2rem
+  font-size: 1.3rem;
+  color: white;
+  text-shadow: 0.5px 0.5px black;
 }
 
 .author{
